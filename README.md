@@ -1,14 +1,22 @@
-# Project
+# Me solution for Teams
 
-> This repo has been populated by an initial template to help get you started. Please
-> make sure to update the content to build a great experience for community-building.
+The Me solution for Teams will provide users a place to view all their 
+personal information with the click of button. The Me solution consists of several custom SharePoint Framework Web parts (SPFX) along with out of the box SharePoint webparts to allow an organization to 
+create a SharePoint page for users. 
 
-As the maintainer of this project, please make a few updates:
+## screenshot
 
-- Improving this README.MD file to provide a great experience
-- Updating SUPPORT.MD with content about this project's support experience
-- Understanding the security reporting process in SECURITY.MD
-- Remove this section from the README
+
+## Deploying SPFX Webpart
+
+Each of the Me webparts are open source and the entire solution can be found at ## insert link here ##
+
+
+
+
+
+
+
 
 ## Contributing
 
