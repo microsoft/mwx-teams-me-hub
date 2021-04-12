@@ -1,0 +1,20 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "my-day-email-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/myDayEmail/MyDayEmailWebPart.js",
+          "manifest": "./src/webparts/myDayEmail/MyDayEmailWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "MyDayEmailWebPartStrings": "lib/webparts/myDayEmail/loc/{locale}.js",
+    "ControlStrings": "node_modules/@pnp/spfx-controls-react/lib/loc/{locale}.js",
+    "PropertyControlStrings": "node_modules/@pnp/spfx-property-controls/lib/loc/{locale}.js"
+  }
+}
