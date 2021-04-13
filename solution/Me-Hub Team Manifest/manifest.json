@@ -5,12 +5,12 @@
     "showLoadingIndicator": true,
     "isFullScreen": false,
     "id": "3591b52e-9348-4890-95fc-6971775c962c",
-    "packageName": "gov.c2cdemo.teams.learningpathways",
+    "packageName": "gov.contoso.teams.mehub",
     "developer": {
         "name": "C2C Demos",
-        "websiteUrl": "https://aka.ms/c2cdemo",
-        "privacyUrl": "https://aka.ms/c2cprivacy",
-        "termsOfUseUrl": "https://aka.ms/c2ctermosofuse"
+        "websiteUrl": "https://contoso.com/",
+        "privacyUrl": "https://consoto.com/privacy",
+        "termsOfUseUrl": "https://contoso.com/termosofuse"
     },
     "icons": {
         "color": "color.png",
