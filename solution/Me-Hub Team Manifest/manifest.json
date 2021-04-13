@@ -1,0 +1,59 @@
+{
+    "$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.8/MicrosoftTeams.schema.json",
+    "manifestVersion": "1.8",
+    "version": "1.0.1",
+    "showLoadingIndicator": true,
+    "isFullScreen": false,
+    "id": "3591b52e-9348-4890-95fc-6971775c962c",
+    "packageName": "gov.c2cdemo.teams.learningpathways",
+    "developer": {
+        "name": "C2C Demos",
+        "websiteUrl": "https://aka.ms/c2cdemo",
+        "privacyUrl": "https://aka.ms/c2cprivacy",
+        "termsOfUseUrl": "https://aka.ms/c2ctermosofuse"
+    },
+    "icons": {
+        "color": "color.png",
+        "outline": "outline.png"
+    },
+    "name": {
+        "short": "Me",
+        "full": "Me Experience"
+    },
+    "description": {
+        "short": "View your emails, upcoming meetings and other information relative to you.",
+        "full": "There is no 'I' in Teams but there is a 'Me'.  View your emails, upcoming meetings and other information relative to you."
+    },
+    "accentColor": "#2E7AA2",
+    "staticTabs": [
+        {
+            "entityId": "myDay",
+            "name": "My Day",
+            "contentUrl": "https://contoso.sharepoint.com/sites/Me/_layouts/15/teamslogon.aspx?SPFX=true&dest=/sites/Me",
+            "websiteUrl": "https://contoso.sharepoint.com/sites/Me",
+            "scopes": [
+                "personal"
+            ]
+        },
+        {
+            "entityId": "myNews",
+            "name": "My News",
+            "contentUrl": "https://contoso.sharepoint.com/sites/Me/_layouts/15/teamslogon.aspx?SPFX=true&dest=/sites/Me/SitePages/news.aspx",
+            "websiteUrl": "https://contoso.sharepoint.com/sites/Me/SitePages/news.aspx",
+            "scopes": [
+                "personal"
+            ]
+        }
+    ],
+    "permissions": [
+        "identity",
+        "messageTeamMembers"
+    ],
+    "validDomains": [
+        "contoso.sharepoint.com"
+    ],
+    "webApplicationInfo": {
+        "id": "00000003-0000-0ff1-ce00-000000000000",
+        "resource": "https://contoso.sharepoint.com"
+    }
+}
