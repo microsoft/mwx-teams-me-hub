@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
 import { ITaskList } from './ITaskList';
 import { ITask } from './ITasks';
 

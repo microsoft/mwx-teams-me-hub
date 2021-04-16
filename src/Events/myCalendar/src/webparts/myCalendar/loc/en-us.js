@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
 define([], function() {
   return {
     "AllDay": "All day",
