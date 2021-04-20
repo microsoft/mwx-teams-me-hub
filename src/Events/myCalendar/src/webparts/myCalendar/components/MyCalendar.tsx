@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
 import * as React from 'react';
 import styles from './MyCalendar.module.scss';
 import * as strings from 'MyCalendarWebPartStrings';

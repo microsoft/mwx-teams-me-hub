@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
 declare interface IMyDayEmailWebPartStrings {
   Error: string;
   Loading: string;

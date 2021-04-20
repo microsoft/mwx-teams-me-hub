@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
 declare interface IMyCalendarWebPartStrings {
   AllDay: string;
   DaysInAdvance: string;
