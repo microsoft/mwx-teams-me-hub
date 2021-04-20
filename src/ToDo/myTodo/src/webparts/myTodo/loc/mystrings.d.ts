@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
 declare interface IMyTodoWebPartStrings {
   PropertyPaneDescription: string;
   BasicGroupName: string;

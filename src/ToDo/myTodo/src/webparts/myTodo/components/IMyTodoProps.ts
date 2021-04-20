@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
 import { MSGraphClient } from "@microsoft/sp-http";
 import { DisplayMode } from "@microsoft/sp-core-library";
 import { IMyTodoWebPartProps } from "../MyTodoWebPart";
