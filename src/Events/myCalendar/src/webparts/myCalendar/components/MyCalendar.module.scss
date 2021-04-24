@@ -81,4 +81,10 @@
     @include ms-font-m;
     color: $ms-color-alert;
   }
+  .commandBar {
+    .root {
+      border: 0;
+      background-color: #ffffff;
+  }
+}
 }
