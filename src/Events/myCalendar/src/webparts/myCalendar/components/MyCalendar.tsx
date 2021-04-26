@@ -19,62 +19,7 @@ import { Stack, IStackStyles, IStackTokens, IStackItemStyles } from 'office-ui-f
 import { Text } from 'office-ui-fabric-react/lib/Text';
 
 
-const EventInfo = (props: MgtTemplateProps) => {
-  /**
-   * Get user-friendly string that represents the duration of an event
-   * < 1h: x minutes
-   * >= 1h: 1 hour (y minutes)
-   * all day: All day
-   */
-  const getDuration = (_event: Event): string => {
-    if (_event.isAllDay) {
-      return strings.AllDay;
-    }
 
-    const _startDateTime: Date = new Date(_event.start.dateTime);
-    const _endDateTime: Date = new Date(_event.end.dateTime);
-    // get duration in minutes
-    const _duration: number = Math.round((_endDateTime as any) - (_startDateTime as any)) / (1000 * 60);
-    if (_duration <= 0) {
-      return '';
-    }
-
-    if (_duration < 60) {
-      return `${_duration} ${strings.Minutes}`;
-    }
-
-    const _hours: number = Math.floor(_duration / 60);
-    const _minutes: number = Math.round(_duration % 60);
-    let durationString: string = `${_hours} ${_hours > 1 ? strings.Hours : strings.Hour}`;
-    if (_minutes > 0) {
-      durationString += ` ${_minutes} ${strings.Minutes}`;
-    }
-
-    return durationString;
-  };
-
-  const event: Event | undefined = props.dataContext ? props.dataContext.event : undefined;
-
-  if (!event) {
-    return <div />;
-  }
-
-  const startTime: Date = new Date(event.start.dateTime);
-  const minutes: number = startTime.getMinutes();
-
-  return <div className={`${styles.meetingWrapper} ${event.showAs}`}>
-    <Link className={styles.meeting} onClick={() => this._showEventDetails(event.id) } >
-      <div className={styles.linkWrapper}>
-        <div className={styles.start}>{`${startTime.getHours()}:${minutes < 10 ? '0' + minutes : minutes}`}</div>
-        <div>
-          <div className={styles.subject}>{event.subject}</div>
-          <div className={styles.duration}>{getDuration(event)}</div>
-          <div className={styles.location}>{event.location.displayName}</div>
-        </div>
-      </div>
-    </Link>
-  </div>;
-};
 
 export default class MyCalendar extends React.Component<IMyCalendarProps, IMyCalendarState> {
   private _interval: number;
@@ -96,7 +41,7 @@ export default class MyCalendar extends React.Component<IMyCalendarProps, IMyCal
       loading: true,
       renderedDateTime: new Date(),
       isOpen: false,
-      activeEvent: undefined
+      activeEvent: {} as microsoftgraph.Event
     };
   }
 
@@ -175,25 +120,26 @@ export default class MyCalendar extends React.Component<IMyCalendarProps, IMyCal
     }
   }
 
-  private _showEventDetails = (messageId: string):void => {
-    this 
+  private _showEventDetails = (messageId: string): void => {
+    this
       ._getEventDetails(messageId)
-      .then((activeEvent:Event):void =>{
+      .then((activeEvent: Event): void => {
         this.setState({
-          isOpen:true,
-          activeEvent:activeEvent
+          isOpen: true,
+          activeEvent: activeEvent
         });
-      }); 
+      });
   }
 
-  private _getEventDetails = (messageId: string): Promise<Event> => {    
+  private _getEventDetails = (messageId: string): Promise<Event> => {
     return new Promise<Event>((resolve, reject) => {
       Providers.globalProvider.graph
         // get the mailbox settings
-        .api(`me/mailboxSettings/calendar/events/`+ messageId)
+        .api(`me/calendar/events/` + messageId)
         .version("v1.0")
         .get((err: any, res: Event): void => {
           if (err) {
+            console.log("error:" + err);
             return reject(err);
           }
           resolve(res);
@@ -201,7 +147,60 @@ export default class MyCalendar extends React.Component<IMyCalendarProps, IMyCal
     });
   }
 
+  private getDuration = (_event: Event): string => {
+    if (_event.isAllDay) {
+      return strings.AllDay;
+    }
+
+    const _startDateTime: Date = new Date(_event.start.dateTime);
+    const _endDateTime: Date = new Date(_event.end.dateTime);
+    // get duration in minutes
+    const _duration: number = Math.round((_endDateTime as any) - (_startDateTime as any)) / (1000 * 60);
+    if (_duration <= 0) {
+      return '';
+    }
+
+    if (_duration < 60) {
+      return `${_duration} ${strings.Minutes}`;
+    }
+
+    const _hours: number = Math.floor(_duration / 60);
+    const _minutes: number = Math.round(_duration % 60);
+    let durationString: string = `${_hours} ${_hours > 1 ? strings.Hours : strings.Hour}`;
+    if (_minutes > 0) {
+      durationString += ` ${_minutes} ${strings.Minutes}`;
+    }
+
+    return durationString;
+  }
+
   public render(): React.ReactElement<IMyCalendarProps> {
+
+    const EventInfo = (props: MgtTemplateProps) => {
+
+      const event: Event | undefined = props.dataContext ? props.dataContext.event : undefined;
+
+      if (!event) {
+        return <div />;
+      }
+
+      const startTime: Date = new Date(event.start.dateTime);
+      const minutes: number = startTime.getMinutes();
+
+      return <div className={`${styles.meetingWrapper} ${event.showAs}`}>
+        <Link className={styles.meeting} onClick={() => this._showEventDetails(event.id)} href="">
+          <div className={styles.linkWrapper}>
+            <div className={styles.start}>{`${startTime.getHours()}:${minutes < 10 ? '0' + minutes : minutes}`}</div>
+            <div>
+              <div className={styles.subject}>{event.subject}</div>
+              <div className={styles.duration}>{this.getDuration(event)}</div>
+              <div className={styles.location}>{event.location.displayName}</div>
+            </div>
+          </div>
+        </Link>
+      </div>;
+    };
+
     const date: Date = new Date();
     const now: string = date.toISOString();
     // set the date to midnight today to load all upcoming meetings for today
@@ -212,14 +211,14 @@ export default class MyCalendar extends React.Component<IMyCalendarProps, IMyCal
     const midnight: string = date.toISOString();
 
     const recipientStackTokens: IStackTokens = {
-      childrenGap: 7    
-    };
-  
-    const messageDetailsStackTokens: IStackTokens = {
-      childrenGap: 3    
+      childrenGap: 7
     };
 
-    const messageDetailsCommandBarFarItems: ICommandBarItemProps[] = [      
+    const eventDetailsStackTokens: IStackTokens = {
+      childrenGap: 3
+    };
+
+    const messageDetailsCommandBarFarItems: ICommandBarItemProps[] = [
       {
         key: 'viewInToDo',
         text: 'View in ToDo',
@@ -238,47 +237,47 @@ export default class MyCalendar extends React.Component<IMyCalendarProps, IMyCal
           !this.state.loading &&
           <>
             <PrimaryButton iconProps={{ iconName: 'AddEvent' }} onClick={this._onNewMeeting} disabled={false} >
-            {strings.NewMeeting}
-                </PrimaryButton>
+              {strings.NewMeeting}
+            </PrimaryButton>
             <div className={styles.list}>
               <Agenda
                 preferredTimezone={this.state.timeZone}
                 eventQuery={`me/calendar/calendarView?startDateTime=${now}&endDateTime=${midnight}`}
                 showMax={this.props.numMeetings > 0 ? this.props.numMeetings : undefined} >
-                <EventInfo template='event'  />
+                <EventInfo template='event' />
               </Agenda>
             </div>
             <Link href='https://outlook.office.com/owa/?path=/calendar/view/Day' target='_blank'>{strings.ViewAll}</Link>
           </>
         }
-            {
-          (true && this.state.isOpen) ? 
-        <Panel
-          //className={styles.messageDetails}
-          isLightDismiss          
-          isOpen={this.state.isOpen}
-          onDismiss={() => { this.setState( { isOpen: false }); } }
-          type={PanelType.largeFixed}          
-          closeButtonAriaLabel="Close"
-          headerText={this.state.activeEvent.subject}
-        >   
-          <Stack tokens={messageDetailsStackTokens}>            
-            <CommandBar
-              items={[]}
-              farItems={messageDetailsCommandBarFarItems}
-              //className={styles.commandBar}
-              ariaLabel="Use left and right arrow keys to navigate between commands"
-            />
-            <Text>
-              {this.state.activeEvent.subject}
-            </Text>          
-           {  (this.state.activeEvent.body.contentType === "html") ?           
-            <div dangerouslySetInnerHTML={{ __html: this.state.activeEvent.body.content }}></div> : 
-            <div>{this.state.activeEvent.body.content}</div>
-            }        
-          </Stack>    
-        </Panel> : null
-      }
+        {
+          (true && this.state.isOpen) ?
+            <Panel
+              className={styles.eventDetails}
+              isLightDismiss
+              isOpen={this.state.isOpen}
+              onDismiss={() => { this.setState({ isOpen: false }); }}
+              type={PanelType.largeFixed}
+              closeButtonAriaLabel="Close"
+              headerText={this.state.activeEvent.subject}
+            >
+              <Stack tokens={recipientStackTokens}>
+                <CommandBar
+                  items={[]}
+                  farItems={messageDetailsCommandBarFarItems}
+                  className={styles.commandBar}
+                  ariaLabel="Use left and right arrow keys to navigate between commands"
+                />
+                <Text>
+                  {new Date(this.state.activeEvent.start.dateTime).toLocaleString()} - {new Date(this.state.activeEvent.end.dateTime).toLocaleTimeString()}
+                </Text>
+              </Stack>
+              {(this.state.activeEvent.body.contentType === "html") ?
+                <div dangerouslySetInnerHTML={{ __html: this.state.activeEvent.body.content }}></div> :
+                <div>{this.state.activeEvent.body.content}</div>
+              }
+            </Panel> : null
+        }
         {
           !this.state.loading &&
           this.state.error &&

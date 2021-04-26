@@ -13,7 +13,7 @@ import {
 } from '@microsoft/sp-property-pane';
 
 import * as strings from 'MyCalendarWebPartStrings';
-import PersonalCalendar from './components/MyCalendar';
+import MyCalendar from './components/MyCalendar';
 import { IMyCalendarProps } from './components/IMyCalendarProps';
 import { MSGraphClient } from '@microsoft/sp-http';
 import { Providers, SharePointProvider } from '@microsoft/mgt';
@@ -35,7 +35,7 @@ export default class MyCalendarWebPart extends BaseClientSideWebPart<IMyCalendar
 
   public render(): void {
     const element: React.ReactElement<IMyCalendarProps> = React.createElement(
-      PersonalCalendar,
+      MyCalendar,
       {
         title: this.properties.title,
         refreshInterval: this.properties.refreshInterval,
