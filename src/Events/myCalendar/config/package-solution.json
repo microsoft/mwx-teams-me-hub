@@ -3,7 +3,7 @@
   "solution": {
     "name": "my-calendar-client-side-solution",
     "id": "a7186dc1-42b1-4eb6-85d0-72d3bf7fbfb9",
-    "version": "1.0.0.0",
+    "version": "1.0.0.1",
     "includeClientSideAssets": true,
     "skipFeatureDeployment": true,
     "isDomainIsolated": false,
