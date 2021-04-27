@@ -16,7 +16,7 @@ import * as strings from 'MyCalendarWebPartStrings';
 import MyCalendar from './components/MyCalendar';
 import { IMyCalendarProps } from './components/IMyCalendarProps';
 import { MSGraphClient } from '@microsoft/sp-http';
-import { Providers, SharePointProvider } from '@microsoft/mgt';
+
 
 export interface IMyCalendarWebPartProps {
   title: string;
@@ -27,10 +27,17 @@ export interface IMyCalendarWebPartProps {
 
 export default class MyCalendarWebPart extends BaseClientSideWebPart<IMyCalendarWebPartProps> {
   private propertyFieldNumber;
+  private graphClient: MSGraphClient;
 
   public onInit(): Promise<void> {
-    Providers.globalProvider = new SharePointProvider(this.context);
-    return Promise.resolve();
+    return new Promise<void>((resolve: () => void, reject: (error: any) => void): void => {
+      this.context.msGraphClientFactory
+        .getClient()
+        .then((client: MSGraphClient): void => {
+          this.graphClient = client;
+          resolve();
+        }, err => reject(err));
+    });
   }
 
   public render(): void {
@@ -44,6 +51,7 @@ export default class MyCalendarWebPart extends BaseClientSideWebPart<IMyCalendar
         // pass the current display mode to determine if the title should be
         // editable or not
         displayMode: this.displayMode,
+        graphClient: this.graphClient,
         // handle updated web part title
         updateProperty: (value: string): void => {
           // store the new title in the title web part property
