@@ -238,10 +238,12 @@ export default class MyCalendar extends React.Component<IMyCalendarProps, IMyCal
 
   private _getEventDetails = (messageId: string): Promise<Event> => {
     return new Promise<Event>((resolve, reject) => {
+      this._getTimeZone().then(timeZone => {
       this.props.graphClient
         // get the mailbox settings
         .api(`me/calendar/events/` + messageId)
         .version("v1.0")
+        .header("Prefer", "outlook.timezone=" + '"' + timeZone + '"')
         .get((err: any, res: Event): void => {
           if (err) {
             console.log("error:" + err);
@@ -249,6 +251,7 @@ export default class MyCalendar extends React.Component<IMyCalendarProps, IMyCal
           }
           resolve(res);
         });
+      });
     });
   }
 
