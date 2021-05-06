@@ -25,7 +25,9 @@
     padding-left: 10px;
   }
 
-  
+  .noMessages {
+    @include ms-font-m;
+  }  
 
   // .todoLink{
   //   color: $ms-color-themePrimary;
