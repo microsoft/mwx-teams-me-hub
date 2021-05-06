@@ -7,6 +7,7 @@ declare interface IMyTodoWebPartStrings {
   Error: string;
   Loading: string;
   NumberofTasks: string;
+  NoMessages: string;
   Loading: string;
   RefreshInterval:string;
   ViewAllTodo:string;
