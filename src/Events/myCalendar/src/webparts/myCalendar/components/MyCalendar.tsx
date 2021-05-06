@@ -3,9 +3,9 @@
 import * as React from 'react';
 import styles from './MyCalendar.module.scss';
 import * as strings from 'MyCalendarWebPartStrings';
-import { IMeeting,IMeetings} from './IMeeting';
-import { IMyCalendarState} from './IMyCalendarState';
-import { IMyCalendarProps} from './IMyCalendarProps';
+import { IMeeting, IMeetings } from './IMeeting';
+import { IMyCalendarState } from './IMyCalendarState';
+import { IMyCalendarProps } from './IMyCalendarProps';
 import { WebPartTitle } from '@pnp/spfx-controls-react/lib/WebPartTitle';
 import { CommandBar, ICommandBarItemProps } from 'office-ui-fabric-react/lib/CommandBar';
 import { Link } from 'office-ui-fabric-react/lib/components/Link';
@@ -130,7 +130,7 @@ export default class MyCalendar extends React.Component<IMyCalendarProps, IMyCal
     const minutes: number = startTime.getMinutes();
 
     return <div className={`${styles.meetingWrapper} ${item.showAs}`}>
-      <Link  className={styles.meeting} onClick={() => this._showEventDetails(item.id)} target='_blank' >
+      <Link className={styles.meeting} onClick={() => this._showEventDetails(item.id)} target='_blank' >
         <div className={styles.start}>{`${startTime.getHours()}:${minutes < 10 ? '0' + minutes : minutes}`}</div>
         <div className={styles.subject}>{item.subject}</div>
         <div className={styles.duration}>{this._getDuration(item)}</div>
@@ -239,18 +239,18 @@ export default class MyCalendar extends React.Component<IMyCalendarProps, IMyCal
   private _getEventDetails = (messageId: string): Promise<Event> => {
     return new Promise<Event>((resolve, reject) => {
       this._getTimeZone().then(timeZone => {
-      this.props.graphClient
-        // get the mailbox settings
-        .api(`me/calendar/events/` + messageId)
-        .version("v1.0")
-        .header("Prefer", "outlook.timezone=" + '"' + timeZone + '"')
-        .get((err: any, res: Event): void => {
-          if (err) {
-            console.log("error:" + err);
-            return reject(err);
-          }
-          resolve(res);
-        });
+        this.props.graphClient
+          // get the mailbox settings
+          .api(`me/calendar/events/` + messageId)
+          .version("v1.0")
+          .header("Prefer", "outlook.timezone=" + '"' + timeZone + '"')
+          .get((err: any, res: Event): void => {
+            if (err) {
+              console.log("error:" + err);
+              return reject(err);
+            }
+            resolve(res);
+          });
       });
     });
   }
@@ -315,11 +315,11 @@ export default class MyCalendar extends React.Component<IMyCalendarProps, IMyCal
                 <Text>
                   {new Date(this.state.activeEvent.start.dateTime).toLocaleString()} - {new Date(this.state.activeEvent.end.dateTime).toLocaleTimeString()}
                 </Text>
+                {(this.state.activeEvent.body.contentType === "html") ?
+                  <div dangerouslySetInnerHTML={{ __html: this.state.activeEvent.body.content }}></div> :
+                  <div>{this.state.activeEvent.body.content}</div>
+                }
               </Stack>
-              {(this.state.activeEvent.body.contentType === "html") ?
-                <div dangerouslySetInnerHTML={{ __html: this.state.activeEvent.body.content }}></div> :
-                <div>{this.state.activeEvent.body.content}</div>
-              }
             </Panel> : null
         }
         {
