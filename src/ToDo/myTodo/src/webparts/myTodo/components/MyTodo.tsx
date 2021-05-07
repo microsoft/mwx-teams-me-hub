@@ -99,6 +99,11 @@ export default class MyTodo extends React.Component<IMyTodoProps, IMyTodoState> 
           activeTaskList: defaultTaskList
         });
       }
+      else{
+        this.setState({
+          loading: false
+        });
+      }
     });
   }
 
@@ -321,7 +326,7 @@ export default class MyTodo extends React.Component<IMyTodoProps, IMyTodoState> 
             !this.state.loading && (
               this.state.error ?
                 <span >{this.state.error}</span> :
-                <span ></span>
+                <span className={styles.noMessages}>{strings.NoMessages}</span>
             )
           )
         }
