@@ -12,6 +12,7 @@
 
   .meetingWrapper {
     padding-left: 7px;
+    margin-bottom: 3px;
 
 
     &:global(.tentative) {
@@ -34,6 +35,7 @@
       background: white;
     }
   }
+  
 
   .meeting {
     display: block;
@@ -55,13 +57,17 @@
   .start {
     flex: 0 0 auto;
     height: 1.5em;
-    width: 2.5em;
+    //width: 2.5em;
     margin-right: 0.5em;
   }
 
+  .date {
+    margin: 5px 0px; 
+    @include ms-fontWeight-semibold;
+  }
 
   .subject {
-    @include ms-fontWeight-bold;
+    @include ms-fontWeight-semibold;
   }
 
   .duration {
