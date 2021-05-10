@@ -1,7 +1,7 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
   "id": "b2d964e1-277b-4111-aa08-382760e2966b",
-  "alias": "MyCalendarWebPart",
+  "alias": "my-calendar-webpart",
   "componentType": "WebPart",
 
   // The "*" signifies that the version should be taken from the package.json
@@ -17,11 +17,11 @@
   "preconfiguredEntries": [{
     "groupId": "5c03119e-3074-46fd-976b-c60198311f70", // Other
     "group": { "default": "Other" },
-    "title": { "default": "MyCalendar" },
-    "description": { "default": "My current calendar" },
+    "title": { "default": "My Calendar" },
+    "description": { "default": "View your Office 365 Calendar" },
     "officeFabricIconFontName": "Calendar",
     "properties": {
-      "description": "MyCalendar"
+      "description": "View your Office 365 Calendar"
     }
   }]
 }
