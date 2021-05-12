@@ -3,7 +3,7 @@
   "solution": {
     "name": "my-email-client-side-solution",
     "id": "b7be0f79-70e5-444e-adf7-4d863aaecb29",
-    "version": "1.0.0.10",
+    "version": "1.0.0.2",
     "includeClientSideAssets": true,
     "skipFeatureDeployment": true,
     "isDomainIsolated": false,

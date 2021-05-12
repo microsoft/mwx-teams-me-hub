@@ -19,7 +19,7 @@
     "group": { "default": "Other" },
     "title": { "default": "MyEmail" },
     "description": { "default": "MyEmail description" },
-    "officeFabricIconFontName": "Page",
+    "officeFabricIconFontName": "Mail",
     "properties": {
       "description": "MyEmail"
     }
