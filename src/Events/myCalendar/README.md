@@ -27,11 +27,7 @@ Solution|Author(s)
 --------|---------
 folder name | Author details (name, company, twitter alias with link)
 
-## Version history
 
-Version|Date|Comments
--------|----|--------
-1.0.0.1|April 26, 2021|Added preview panel
 
 
 ## Disclaimer
