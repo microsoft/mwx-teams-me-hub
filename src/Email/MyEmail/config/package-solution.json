@@ -1,13 +1,9 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
   "solution": {
-    "name": "my-email-client-side-solution",
+    "name": "my-email-web-part",
     "id": "b7be0f79-70e5-444e-adf7-4d863aaecb29",
-<<<<<<< HEAD
     "version": "1.0.1.3",
-=======
-    "version": "1.0.0.2",
->>>>>>> aa89e0e00d43d76be8c7ba986ffa8fce8052e5ae
     "includeClientSideAssets": true,
     "skipFeatureDeployment": true,
     "isDomainIsolated": false,

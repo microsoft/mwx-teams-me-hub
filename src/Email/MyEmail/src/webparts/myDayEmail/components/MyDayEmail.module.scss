@@ -20,7 +20,11 @@
     }
   }
 
-  .viewAll, .newEmail {
+  .newEmail {
+    margin-bottom: 10px;
+  }
+
+  .viewAll {
     padding-left: 10px;
   }
 
@@ -41,6 +45,7 @@
       color: inherit;
       background: $ms-color-neutralLight;
       cursor: pointer;
+      text-decoration: none;
     }
   }
 
@@ -48,6 +53,8 @@
     @include ms-font-l;
     @include ms-fontWeight-semibold;
     float: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .icons {
@@ -105,11 +112,13 @@
 
   .noMessages {
     @include ms-font-m;
+    margin: 1em;    
   }
 
   .error {
     @include ms-font-m;
     color: $ms-color-alert;
+    margin: 1em;    
   }
 
   .messageDetails {
