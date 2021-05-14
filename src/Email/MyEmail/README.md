@@ -28,11 +28,6 @@ Solution|Author(s)
 --------|---------
 folder name | Author details (name, company, twitter alias with link)
 
-## Version history
-
-Version|Date|Comments
--------|----|--------
-1.0|March 31, 2021|Initial release
 
 ## Disclaimer
 

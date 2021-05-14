@@ -43,7 +43,7 @@ export class MyDayEmail extends React.Component<IMyDayEmailProps, IMyDayEmailSta
     completed: [{ color: 'green' }, this._messageIconClass]
   });
 
-  
+
 
   constructor(props: IMyDayEmailProps) {
     super(props);  
@@ -75,7 +75,7 @@ export class MyDayEmail extends React.Component<IMyDayEmailProps, IMyDayEmailSta
       error: null,
       loading: true,
       messages: []
-    });   
+    });
 
     const request: GraphRequest = this.props.graphClient
       .api("me/mailFolders/Inbox/messages")
@@ -84,8 +84,13 @@ export class MyDayEmail extends React.Component<IMyDayEmailProps, IMyDayEmailSta
       .top(this.props.numberOfMessages || 5);
 
     // Graph API does not like ordering when we are viewing only flagged items.
+<<<<<<< HEAD
     if ((this.state.filter == strings.AllPivot) || (this.state.filter == strings.UnreadPivot)) {
         request.orderby("receivedDateTime desc");
+=======
+    if ((this.state.filter != strings.FlaggedPivot) && (this.state.filter != strings.ImportantPivot)) {
+      request.orderby("receivedDateTime desc");
+>>>>>>> aa89e0e00d43d76be8c7ba986ffa8fce8052e5ae
     }
 
     if (this.state.filter == strings.UnreadPivot) {
@@ -97,7 +102,7 @@ export class MyDayEmail extends React.Component<IMyDayEmailProps, IMyDayEmailSta
     else if (this.state.filter == EMailDisplay.Flagged) {
       request.filter("flag/flagStatus eq 'flagged'");
     }
-      
+
     console.log(`email request: filter = ${this.state.filter} - url: ${request.buildFullUrl()}`);
 
     request.get((err: any, res: IMessages): void => {
@@ -124,13 +129,13 @@ export class MyDayEmail extends React.Component<IMyDayEmailProps, IMyDayEmailSta
         });
       }
     });
-    
-  }  
+
+  }
   private _handlePivotChange = (item: PivotItem): void => {
     console.log(`Pivot Change: ${item.props.itemKey}`);
 
-    this.setState({ 
-      filter: item.props.itemKey 
+    this.setState({
+      filter: item.props.itemKey
     });
 
     this._reRender();
@@ -140,6 +145,7 @@ export class MyDayEmail extends React.Component<IMyDayEmailProps, IMyDayEmailSta
     window.open("https://outlook.office.com/?path=/mail/action/compose", "_blank");
   }
 
+<<<<<<< HEAD
   private _showMessageDetails = (messageId: string, webLink: string): void => {    
     if (this.props.clickAction === ClickAction.OpenInOutlook) {
       window.open(webLink, "_blank");
@@ -167,6 +173,32 @@ export class MyDayEmail extends React.Component<IMyDayEmailProps, IMyDayEmailSta
           error: err.message ? err.message : strings.Error,            
         });
       });
+=======
+  private _showMessageDetails = (messageId: string): void => {
+    const request: GraphRequest = this.props.graphClient
+      .api(`me/mailFolders/Inbox/messages/${messageId}`)
+      .version("v1.0")
+      .select("id,bodyPreview,receivedDateTime,from,subject,webLink,isRead,importance,flag,hasAttachments,body,toRecipients,ccRecipients"); //,meetingMessageType   
+
+    console.log(`email request: ${request.buildFullUrl()}`);
+
+    request.get((err: any, res: IMessageDetails): void => {
+      if (err) {
+        // Something failed calling the MS Graph
+        this.setState({
+          error: err.message ? err.message : strings.Error,
+        });
+      }
+      else if (res) {
+        this.setState({
+          isOpen: true,
+          activeMessage: res
+        });
+
+        console.log(`email content: ${this.state.activeMessage.body.content}`);
+      }
+    });
+>>>>>>> aa89e0e00d43d76be8c7ba986ffa8fce8052e5ae
   }
 
   private _changeMessageReadStatus = (messageId: string, isRead: boolean):IMessage[] => {
@@ -220,7 +252,7 @@ export class MyDayEmail extends React.Component<IMyDayEmailProps, IMyDayEmailSta
     this._reRender();
   }
 
- 
+
 
   public componentDidMount(): void {
     // load data initially after the component has been instantiated
@@ -243,13 +275,20 @@ export class MyDayEmail extends React.Component<IMyDayEmailProps, IMyDayEmailSta
 
     // verify if the component should update. Helps avoid unnecessary re-renders
     // when the parent has changed but this component hasn't
+<<<<<<< HEAD
     if ((prevProps.numberOfMessages !== this.props.numberOfMessages) || 
         (prevState.renderedDateTime !== this.state.renderedDateTime) || 
         (prevState.filter !== this.state.filter)) {
+=======
+    if ((prevProps.nrOfMessages !== this.props.nrOfMessages) ||
+      (prevState.renderedDateTime !== this.state.renderedDateTime) ||
+      (prevState.filter !== this.state.filter)) {
+>>>>>>> aa89e0e00d43d76be8c7ba986ffa8fce8052e5ae
       this._loadMessages();
     }
   }
 
+<<<<<<< HEAD
   public render(): React.ReactElement<IMyDayEmailProps> {  
     if (this._editModeRefresh()) {
       return null;
@@ -259,16 +298,19 @@ export class MyDayEmail extends React.Component<IMyDayEmailProps, IMyDayEmailSta
 
     console.log(semanticColors);
     console.log(fonts);
+=======
+  public render(): React.ReactElement<IMyDayEmailProps> {
+>>>>>>> aa89e0e00d43d76be8c7ba986ffa8fce8052e5ae
 
     const recipientStackTokens: IStackTokens = {
-      childrenGap: 7    
-    };
-  
-    const messageDetailsStackTokens: IStackTokens = {
-      childrenGap: 3    
+      childrenGap: 7
     };
 
-    const messageDetailsCommandBarFarItems: ICommandBarItemProps[] = [      
+    const messageDetailsStackTokens: IStackTokens = {
+      childrenGap: 3
+    };
+
+    const messageDetailsCommandBarFarItems: ICommandBarItemProps[] = [
       {
         key: 'viewInOutlook',
         text: 'View in Outlook',
@@ -299,6 +341,7 @@ export class MyDayEmail extends React.Component<IMyDayEmailProps, IMyDayEmailSta
         {
           this.state.messages &&
             this.state.messages.length > 0 ? (
+<<<<<<< HEAD
               <div>                                          
               { 
                 (this.props.showNew) ? 
@@ -323,6 +366,24 @@ export class MyDayEmail extends React.Component<IMyDayEmailProps, IMyDayEmailSta
                     style={{ color: semanticColors.bodyText}} />                
                 </Pivot> : null
               }
+=======
+            <div>
+              { ///TODO: Make displaying the button a web part property
+                (true) ?
+                  //don't render the button till we figure out how to go straight to new mail
+                  <PrimaryButton iconProps={{ iconName: 'NewMail' }} onClick={this._onNewEmail} disabled={false} >
+                    New message
+                </PrimaryButton> : null
+              }
+              <Pivot
+                initialSelectedKey={strings.AllPivot}
+                onLinkClick={this._handlePivotChange}
+                selectedKey={this.state.filter}
+                headersOnly={true}>
+                <PivotItem headerText={strings.AllPivot} itemKey={strings.AllPivot} />
+                <PivotItem headerText={strings.UnreadPivot} itemKey={strings.UnreadPivot} />
+              </Pivot>
+>>>>>>> aa89e0e00d43d76be8c7ba986ffa8fce8052e5ae
               <List items={this.state.messages}
                 onRenderCell={this._onRenderEmailCell} className={styles.list} />
               {
@@ -330,15 +391,33 @@ export class MyDayEmail extends React.Component<IMyDayEmailProps, IMyDayEmailSta
                 <Link href='https://outlook.office.com/owa/' target='_blank' className={styles.viewAll}>{strings.ViewAll}</Link>
               }
             </div>
-            ) : (
-              !this.state.loading && (
-                this.state.error ?
-                  <span className={styles.error}>{this.state.error}</span> :
+          ) : (
+            !this.state.loading && (
+              this.state.error ?
+                <span className={styles.error}>{this.state.error}</span> :
+                <div>
+                  { ///TODO: Make displaying the button a web part property
+                    (true) ?
+                      //don't render the button till we figure out how to go straight to new mail
+                      <PrimaryButton iconProps={{ iconName: 'NewMail' }} onClick={this._onNewEmail} disabled={false} >
+                        New message
+                    </PrimaryButton> : null
+                  }
+                  <Pivot
+                    initialSelectedKey={strings.AllPivot}
+                    onLinkClick={this._handlePivotChange}
+                    selectedKey={this.state.filter}
+                    headersOnly={true}>
+                    <PivotItem headerText={strings.AllPivot} itemKey={strings.AllPivot} />
+                    <PivotItem headerText={strings.UnreadPivot} itemKey={strings.UnreadPivot} />
+                  </Pivot>
                   <span className={styles.noMessages}>{strings.NoMessages}</span>
-              )
+                </div>
             )
+          )
         }
         {
+<<<<<<< HEAD
           (true && this.state.isOpen) ? 
         <Panel
           className={styles.messageDetails}
@@ -404,12 +483,76 @@ export class MyDayEmail extends React.Component<IMyDayEmailProps, IMyDayEmailSta
     const { semanticColors, fonts }: IReadonlyTheme = this.props.themeVariant;
     
     var messageStyle:string = styles.message;
+=======
+          (true && this.state.isOpen) ?
+            <Panel
+              className={styles.messageDetails}
+              isLightDismiss
+              isOpen={this.state.isOpen}
+              onDismiss={() => { this.setState({ isOpen: false }); }}
+              type={PanelType.largeFixed}
+              closeButtonAriaLabel="Close"
+              headerText={this.state.activeMessage.subject}
+            >
+              <Stack tokens={messageDetailsStackTokens}>
+                <CommandBar
+                  items={[]}
+                  farItems={messageDetailsCommandBarFarItems}
+                  className={styles.commandBar}
+
+                  ariaLabel="Use left and right arrow keys to navigate between commands"
+                />
+                <Text>
+                  {this.state.activeMessage.from.emailAddress.name || this.state.activeMessage.from.emailAddress.address}
+                </Text>
+                <Text>
+                  {new Date(this.state.activeMessage.receivedDateTime).toLocaleDateString()}
+                  {new Date(this.state.activeMessage.receivedDateTime).toLocaleTimeString()}
+                </Text>
+                <Stack horizontal disableShrink className={styles.recipients} tokens={recipientStackTokens}>
+                  <Text className={styles.prompt}>To: </Text>
+                  {this.state.activeMessage.toRecipients.map((recipient, index) => (
+                    <Text className={styles.recipient}>
+                      {(recipient.emailAddress.name || recipient.emailAddress.address)}
+                      {(index !== this.state.activeMessage.toRecipients.length - 1) ? "; " : ""}
+                    </Text>
+                  ))}
+                </Stack>
+                {(this.state.activeMessage.ccRecipients != null && this.state.activeMessage.ccRecipients.length > 0) ?
+                  <Stack horizontal disableShrink className={styles.recipients} tokens={recipientStackTokens}>
+                    <Text className={styles.prompt}>Cc: </Text>
+                    {this.state.activeMessage.ccRecipients.map((recipient, index) => (
+                      <Text className={styles.recipient}>
+                        {(recipient.emailAddress.name || recipient.emailAddress.address)}
+                        {(index !== this.state.activeMessage.ccRecipients.length - 1) ? "; " : ""}
+                      </Text>
+                    ))}
+                  </Stack> : null
+                }
+                {(this.state.activeMessage.body.contentType === "html") ?
+                  <div dangerouslySetInnerHTML={{ __html: this.state.activeMessage.body.content }}></div> :
+                  <div>{this.state.activeMessage.body.content}</div>
+                }
+              </Stack>
+            </Panel> : null
+        }
+      </div>
+    );
+  }
+
+  /**
+  * Render message item
+  */
+  private _onRenderEmailCell = (item: IMessage, index: number | undefined): JSX.Element => {
+    var messageStyle: string = styles.message;
+>>>>>>> aa89e0e00d43d76be8c7ba986ffa8fce8052e5ae
 
     if (item.isRead) {
       messageStyle = styles.message + " " + styles.isRead;
     }
 
     return (
+<<<<<<< HEAD
       <div>
       {
         (index > 0) &&
@@ -420,14 +563,21 @@ export class MyDayEmail extends React.Component<IMyDayEmailProps, IMyDayEmailSta
           { ((item.from.emailAddress.name || item.from.emailAddress.address).length > 35) ?
           (item.from.emailAddress.name || item.from.emailAddress.address).substr(0, 32) + '...' :
           (item.from.emailAddress.name || item.from.emailAddress.address)
+=======
+      <Link className={messageStyle} onClick={() => this._showMessageDetails(item.id)}>
+        <div className={styles.from}>
+          {((item.from.emailAddress.name || item.from.emailAddress.address).length > 35) ?
+            (item.from.emailAddress.name || item.from.emailAddress.address).substr(0, 32) + '...' :
+            (item.from.emailAddress.name || item.from.emailAddress.address)
+>>>>>>> aa89e0e00d43d76be8c7ba986ffa8fce8052e5ae
           }
         </div>
         <div className={styles.icons}>
-          {(item.hasAttachments) ? <FontIcon iconName="Attach" className={this._classNames.attachment} />: null}          
+          {(item.hasAttachments) ? <FontIcon iconName="Attach" className={this._classNames.attachment} /> : null}
           {(item.importance == "high") ? <FontIcon iconName="Important" className={this._classNames.highImportance} /> : null}
           {(item.importance == "low") ? <FontIcon iconName="SortDown" className={this._classNames.lowImportance} /> : null}
-          {(item.flag.flagStatus == "flagged") ? <FontIcon iconName="Flag" className={this._classNames.flagged} /> : null }
-          {(item.flag.flagStatus == "complete") ? <FontIcon iconName="CheckMark" className={this._classNames.completed} />: null }          
+          {(item.flag.flagStatus == "flagged") ? <FontIcon iconName="Flag" className={this._classNames.flagged} /> : null}
+          {(item.flag.flagStatus == "complete") ? <FontIcon iconName="CheckMark" className={this._classNames.completed} /> : null}
         </div>
         <div className={styles.subject}>{item.subject}</div>
         <div className={styles.date}>{(new Date(item.receivedDateTime).toLocaleDateString())}</div>
@@ -435,6 +585,7 @@ export class MyDayEmail extends React.Component<IMyDayEmailProps, IMyDayEmailSta
       </Link>
       </div>
     );
+<<<<<<< HEAD
   } 
 
   private _getMessageDetailsCommandBarItems = (): ICommandBarItemProps[] => {
@@ -470,5 +621,7 @@ export class MyDayEmail extends React.Component<IMyDayEmailProps, IMyDayEmailSta
       }
 
     return false;    
+=======
+>>>>>>> aa89e0e00d43d76be8c7ba986ffa8fce8052e5ae
   }
 }
