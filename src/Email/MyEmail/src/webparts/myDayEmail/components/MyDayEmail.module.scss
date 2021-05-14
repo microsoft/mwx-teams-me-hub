@@ -3,9 +3,28 @@
 @import '~office-ui-fabric-react/dist/sass/References.scss';
 
 .myDayEmail {
-  .title, .viewAll, .newEmail {
+  .title {    
+    margin-bottom: 10px;
+
+
+  }
+
+  .webPartTitle {
+    margin-bottom: 10px;    
+  }
+
+  .webPartTitleStandard {
+    span[role="heading"] {      
+      font-size: 20px;
+      font-weight: 600;
+    }
+  }
+
+  .viewAll, .newEmail {
     padding-left: 10px;
   }
+
+
 
   .list {
     margin-top: 1em;
