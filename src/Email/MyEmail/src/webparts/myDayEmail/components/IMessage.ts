@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
-import { isElementFocusSubZone } from "office-ui-fabric-react";
+//import { isElementFocusSubZone } from "office-ui-fabric-react";
 
 export interface IMessages {
   value: IMessage[];
