@@ -21,7 +21,15 @@
     "description": { "default": "View your Office 365 Calendar" },
     "officeFabricIconFontName": "Calendar",
     "properties": {
-      "description": "View your Office 365 Calendar"
+      "description": "View your Office 365 Calendar",
+      "title": "My Day",
+      "refreshInterval": 3,
+      "daysInAdvance": 0,
+      "numMeetings": 5,
+      "clickAction": "Preview",
+      "showNew": true,
+      "showViewAll": true,
+      "headerDisplay": "Standard"
     }
   }]
 }
