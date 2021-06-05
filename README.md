@@ -1,20 +1,33 @@
 # Me solution for Teams
 
+## Supported Versions of Office 365
+Commercial|GCC|GCC High|GCC DoD
+-|-|-|-
+![Supported](assets/supported.png)|![Supported](assets/supported.png)|![Unknown](assets/supported.png)|![Unknown](assets/unknown-supported.png)
+
+
+## SharePoint Framework Version
+![version](https://img.shields.io/badge/version-1.11-green.svg)
+
+## Overview
+
 The Me solution for Teams will provide users a place to view all their 
 personal information with the click of button. The Me solution consists of several custom SharePoint Framework Web parts (SPFX) along with out of the box SharePoint webparts to allow an organization to 
 create a SharePoint page for users. 
 
-## screenshot
 
-
-## Deploying SPFX Webpart
-
-Each of the Me webparts are open source and the entire solution can be found at ## insert link here ##
-
-
-
-## Create personal tab in Teams
-
+## Minimal Path to Awesome
+1. Upload the [my-email.sppkg](./solution/my-email.sppkg) to your tenant's SharePoint App Catalog.
+2. Upload the [my-calendar.sppkg](./solution/my-calendar.sppkg) to your tenant's SharePoint App Catalog.
+3. Upload the [my-todo.sppkg](./solution/my-todo.sppkg) to your tenant's SharePoint App Catalog.
+    1. In each of the **Do you trust solution** dialog
+        1. Make sure **Make this site available to all in the organization** is checked
+        1. Click the deploy button
+4. Create a SharePoint Page and configure with Me-Hub webparts.
+5. Download the sample [Teams Manifest](./solution/Me-Hub%20Team%20Manifest/manifest.json)
+6. Update manifest file links and domains to appropriate domain and pages. 
+7. Create zip file with Teams manifest, [Color.png](./solution/Me-Hub%20Team%20Manifest/color.png) and [outline.png](./solution/Me-Hub%20Team%20Manifest/outline.png)
+8. Upload zip file to Teams to install the app
 
 
 
