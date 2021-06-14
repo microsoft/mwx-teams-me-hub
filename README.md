@@ -25,9 +25,9 @@ The Me solution provides 3 different webparts to deploy to SharePoint page to pr
 
 Each SPFX webpart has several properties and Graph permissions required. 
 
-1. [MyEmail readme](./src/email/readme.md)
-2. [MyEvents readme](./src/events/readme.md)
-3. [ToDo readme](./src/todo/readme.md)
+1. [MyEmail readme](./src/Email/MyEmail/README.md) 
+2. [MyEvents readme](./src/Events/myCalendar/README.md)
+3. [ToDo readme](./src/ToDo/myTodo/README.md)  
 
 
 ## Minimal Path to Awesome
