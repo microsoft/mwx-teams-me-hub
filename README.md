@@ -15,6 +15,11 @@ The Me solution for Teams will provide users a place to view all their
 personal information with the click of button. The Me solution consists of several custom SharePoint Framework Web parts (SPFX) along with out of the box SharePoint webparts to allow an organization to 
 create a SharePoint page for users. 
 
+## Features
+
+The Me solution provides 3 different webparts to deploy to SharePoint page to provide users a single page to view Email, ToDo tasks and Calendar events. The SharePoint pages is deployed as an personal tab within Teams. 
+
+![MeHub](assets/MeHub.png)
 
 ## Minimal Path to Awesome
 1. Upload the [my-email.sppkg](./solution/my-email.sppkg) to your tenant's SharePoint App Catalog.
