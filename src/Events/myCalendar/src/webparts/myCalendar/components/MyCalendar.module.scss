@@ -5,6 +5,25 @@
 .myCalendar {
   @include ms-font-m;
 
+  .webPartTitle {
+    margin-bottom: 10px;    
+  }
+
+  .webPartTitleStandard {
+    span[role="heading"] {      
+      font-size: 20px;
+      font-weight: 600;
+    }
+  }
+
+  .newMeeting {
+    margin-bottom: 10px;
+  }
+
+  .viewAll {
+    padding-left: 10px;
+  }
+
   .list {
     margin-top: 1em;
     margin-bottom: 1em;
@@ -46,6 +65,7 @@
     &:hover {
       color: inherit;
       background: $ms-color-neutralLight;
+      text-decoration: none;
     }
   }
 
@@ -54,11 +74,22 @@
     flex-flow: row nowrap;
   }
 
+  .detailsColumn {
+    float:left;
+  }
+
+  .timeColumn {
+    width: 75px;
+    float: left;
+  }
+
   .start {
     flex: 0 0 auto;
     height: 1.5em;
+    font-size: 14px;
+    @include ms-fontWeight-semibold;
     //width: 2.5em;
-    margin-right: 0.5em;
+    //margin-right: 0.5em;
   }
 
   .date {

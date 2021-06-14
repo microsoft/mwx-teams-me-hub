@@ -3,6 +3,7 @@
 import * as React from 'react';
 import styles from './MyCalendar.module.scss';
 import * as strings from 'MyCalendarWebPartStrings';
+import { HeaderDisplay, ClickAction } from '../enums';
 import { IMeeting, IMeetings } from './IMeeting';
 import { IMyCalendarState } from './IMyCalendarState';
 import { IMyCalendarProps } from './IMyCalendarProps';
@@ -63,68 +64,6 @@ export default class MyCalendar extends React.Component<IMyCalendarProps, IMyCal
     });
   }
 
-  /**
-     * Load recent messages for the current user
-     */
-  // private _loadMeetings(): void {
-  //   if (!this.props.graphClient) {
-  //     return;
-  //   }
-
-  //   // update state to indicate loading and remove any previously loaded
-  //   // meetings
-  //   this.setState({
-  //     error: null,
-  //     loading: true,
-  //     meetings: []
-  //   });
-
-  //   const date: Date = new Date();
-  //   const now: string = date.toISOString();
-  //   // set the date to midnight today to load all upcoming meetings for today
-  //   date.setHours(23);
-  //   date.setMinutes(59);
-  //   date.setSeconds(0);
-  //   date.setDate(date.getDate() + (this.props.daysInAdvance || 0));
-  //   const midnight: string = date.toISOString();
-
-  //   this._getTimeZone().then(timeZone => {
-  //     this.props.graphClient
-  //       // get all upcoming meetings for the rest of the day today
-  //       .api(`me/calendar/calendarView?startDateTime=${now}&endDateTime=${midnight}`)
-  //       .version("v1.0")
-  //       .select('subject,start,end,showAs,webLink,location,isAllDay')
-  //       .top(this.props.numMeetings > 0 ? this.props.numMeetings : 100)
-  //       .header("Prefer", "outlook.timezone=" + '"' + timeZone + '"')
-  //       // sort ascending by start time
-  //       .orderby("start/dateTime")
-  //       .get((err: any, res: IMeetings): void => {
-  //         if (err) {
-  //           // Something failed calling the MS Graph
-  //           this.setState({
-  //             error: err.message ? err.message : strings.Error,
-  //             loading: false
-  //           });
-  //           return;
-  //         }
-
-  //         // Check if a response was retrieved
-  //         if (res && res.value && res.value.length > 0) {
-  //           this.setState({
-  //             meetings: res.value,
-  //             loading: false
-  //           });
-  //         }
-  //         else {
-  //           // No meetings found
-  //           this.setState({
-  //             loading: false
-  //           });
-  //         }
-  //       });
-  //   });
-  // }
-
   private _loadCalendar(): void {
     if (!this.props.graphClient) {
       return;
@@ -164,37 +103,46 @@ export default class MyCalendar extends React.Component<IMyCalendarProps, IMyCal
       });      
   }
 
-    
+  private _getTimeText(date: Date) {
+    const hour: number = date.getHours();
+    const adjHour: number = (hour > 12) ? hour - 12 : hour;
+    const amPm: string = ((hour >= 12) && (hour != 24)) ? "PM" : "AM";
+    const minutes: number = date.getMinutes();
+    return `${adjHour}:${minutes < 10 ? '0' + minutes : minutes} ${amPm}`;
+  }  
+
 
   /**
      * Render meeting item
      */
   private _onRenderCell = (item: IMeeting, index: number | undefined): JSX.Element => {
     const startDate: Date = new Date(item.start.dateTime + 'Z');
-    const hour: number = startDate.getHours();
-    const adjHour: number = (hour > 12) ? hour - 12 : hour;
-    const amPm: string = ((hour >= 12) && (hour != 24)) ? "PM" : "AM";
-    const minutes: number = startDate.getMinutes();
-    
+    const endDate: Date = new Date(item.end.dateTime + 'Z');     
+
     const itemElement: JSX.Element = 
       <div className={`${styles.meetingWrapper} ${item.showAs}`}>
-        <Link className={styles.meeting} onClick={() => this._showEventDetails(item.id)} target='_blank' >
-          <Text nowrap block className={styles.start}>{`${adjHour}:${minutes < 10 ? '0' + minutes : minutes} ${amPm}`}</Text>
-          <Text nowrap block className={styles.subject}>{item.subject}</Text>
-          <Text nowrap block className={styles.duration}>{this._getDuration(item)}</Text>
-          <Text nowrap block className={styles.location}>{item.location.displayName}</Text>                      
+        <Link className={styles.meeting} onClick={() => this._showEventDetails(item.id, item.webLink)} target='_blank' >
+          <div className={styles.timeColumn}>
+            <Text nowrap block className={styles.start}>{this._getTimeText(startDate)}</Text>
+            <Text nowrap block className={styles.duration}>{this._getDurationText(item)}</Text>            
+          </div>
+          <div className={styles.detailsColumn}>            
+            <Text nowrap block className={styles.subject}>{item.subject}</Text> 
+            <Text nowrap block className={styles.location}>{item.location.displayName}</Text>             
+          </div>          
         </Link>
-      </div>;      
+      </div>;    
 
     // If we are only showing today or if the date didn't change from the last item return the element for just the event
     if ((this.props.daysInAdvance == 0) || (!this._didDateChange(startDate, index))) {
       return itemElement;
     }
 
-    return <div>
+    return (
+      <>
         <Text nowrap block className={styles.date}>{this._getDateText(startDate)}</Text>
         {itemElement}
-      </div>;
+      </>);
 
     
   }
@@ -275,42 +223,33 @@ export default class MyCalendar extends React.Component<IMyCalendarProps, IMyCal
     const nextWeek = new Date();
     nextWeek.setDate(nextWeek.getDate() + 7);
     return this._getDateOnly(date) < this._getDateOnly(nextWeek);
-  }
-  
+  }  
 
-  
-
-  /**
-     * Get user-friendly string that represents the duration of the meeting
-     * < 1h: x minutes
-     * >= 1h: 1 hour (y minutes)
-     * all day: All day
-     */
-  private _getDuration = (meeting: IMeeting): string => {
+  private _getDurationText = (meeting: IMeeting): string => {
     if (meeting.isAllDay) {
       return strings.AllDay;
     }
 
-    const startDateTime: Date = new Date(meeting.start.dateTime);
-    const endDateTime: Date = new Date(meeting.end.dateTime);
+    const startDate: Date = new Date(meeting.start.dateTime + 'Z');
+    const endDate: Date = new Date(meeting.end.dateTime + 'Z');        
     // get duration in minutes
-    const duration: number = Math.round((endDateTime as any) - (startDateTime as any)) / (1000 * 60);
+    const duration: number = Math.round((endDate as any) - (startDate as any)) / (1000 * 60);
+    var durationText: string;
+
     if (duration <= 0) {
-      return '';
+      durationText = '';
     }
-
-    if (duration < 60) {
-      return `${duration} ${strings.Minutes}`;
+    else if (duration < 60) {
+      durationText = `${duration} ${strings.Minutes}`;
     }
-
-    const hours: number = Math.floor(duration / 60);
-    const minutes: number = Math.round(duration % 60);
-    let durationString: string = `${hours} ${hours > 1 ? strings.Hours : strings.Hour}`;
-    if (minutes > 0) {
-      durationString += ` ${minutes} ${strings.Minutes}`;
+    else if (duration === 60)  {
+      durationText = `1 ${strings.Hour}`;
     }
-
-    return durationString;
+    else {
+      durationText = `${Math.round((duration / 60) * 10)/10} ${strings.Hours}`;
+    }
+    
+    return durationText;
   }
 
   private _getFilterEndDateString = (): string => {
@@ -375,7 +314,12 @@ export default class MyCalendar extends React.Component<IMyCalendarProps, IMyCal
     }
   }
 
-  private _showEventDetails = (messageId: string): void => {
+  private _showEventDetails = (messageId: string, webLink: string): void => {
+    if (this.props.clickAction === ClickAction.OpenInOutlook) {
+      window.open(webLink, "_blank");
+      return;
+    }
+    
     this
       ._getEventDetails(messageId)
       .then((activeEvent: Event): void => {
@@ -428,49 +372,60 @@ export default class MyCalendar extends React.Component<IMyCalendarProps, IMyCal
 
     return (
       <div className={styles.myCalendar}>
-        <WebPartTitle displayMode={this.props.displayMode}
-          title={this.props.title}
-          updateProperty={this.props.updateProperty} />
         {
-          !this.state.loading &&
-          <>
-            <PrimaryButton iconProps={{ iconName: 'AddEvent' }} onClick={this._onNewMeeting} disabled={false} >
-              {strings.NewMeeting}
-            </PrimaryButton>
-            <div className={styles.list}>
-              <List items={this.state.meetings}
-                onRenderCell={this._onRenderCell} className={styles.list} />
-              <Link href='https://outlook.office.com/owa/?path=/calendar/view/Day' target='_blank'>{strings.ViewAll}</Link>
-            </div>
-          </>
+          this.props.headerDisplay != HeaderDisplay.None &&           
+          <WebPartTitle 
+            displayMode={this.props.displayMode}                  
+            title={this.props.title}
+            className={ (this.props.headerDisplay == HeaderDisplay.Standard) ? `${styles.webPartTitle} ${styles.webPartTitleStandard}` : styles.webPartTitle}
+            updateProperty={this.props.updateProperty} //className={styles.title}         
+            moreLink={ (this.props.showViewAll) ? <Link href="https://outlook.office.com/owa/" target="_blank">See all</Link> : null } 
+          />
         }
         {
-          (true && this.state.isOpen) ?
-            <Panel
-              className={styles.eventDetails}
-              isLightDismiss
-              isOpen={this.state.isOpen}
-              onDismiss={() => { this.setState({ isOpen: false }); }}
-              type={PanelType.largeFixed}
-              closeButtonAriaLabel="Close"
-              headerText={this.state.activeEvent.subject}
-            >
-              <Stack tokens={recipientStackTokens}>
-                <CommandBar
-                  items={[]}
-                  farItems={messageDetailsCommandBarFarItems}
-                  className={styles.commandBar}
-                  ariaLabel="Use left and right arrow keys to navigate between commands"
-                />
-                <Text>
-                  {new Date(this.state.activeEvent.start.dateTime).toLocaleString()} - {new Date(this.state.activeEvent.end.dateTime).toLocaleTimeString()}
-                </Text>
-                {(this.state.activeEvent.body.contentType === "html") ?
-                  <div dangerouslySetInnerHTML={{ __html: this.state.activeEvent.body.content }}></div> :
-                  <div>{this.state.activeEvent.body.content}</div>
-                }
-              </Stack>
-            </Panel> : null
+          !this.state.loading && this.props.showNew &&          
+          <PrimaryButton iconProps={{ iconName: 'AddEvent' }} onClick={this._onNewMeeting} disabled={false} >
+            {strings.NewMeeting}
+          </PrimaryButton>
+        }
+        {
+          !this.state.loading && 
+          <div className={styles.list}>
+            <List items={this.state.meetings}
+              onRenderCell={this._onRenderCell} className={styles.list} />            
+            {
+              this.props.showViewAll && this.props.headerDisplay == HeaderDisplay.None && 
+              <Link href='https://outlook.office.com/owa/?path=/calendar/view/Day' target='_blank' className={styles.viewAll}>{strings.ViewAll}</Link>
+            }
+          </div>          
+        }
+        {
+          this.state.isOpen &&
+          <Panel
+            className={styles.eventDetails}
+            isLightDismiss
+            isOpen={this.state.isOpen}
+            onDismiss={() => { this.setState({ isOpen: false }); }}
+            type={PanelType.largeFixed}
+            closeButtonAriaLabel="Close"
+            headerText={this.state.activeEvent.subject}
+          >
+            <Stack tokens={recipientStackTokens}>
+              <CommandBar
+                items={[]}
+                farItems={messageDetailsCommandBarFarItems}
+                className={styles.commandBar}
+                ariaLabel="Use left and right arrow keys to navigate between commands"
+              />
+              <Text>
+                {new Date(this.state.activeEvent.start.dateTime).toLocaleString()} - {new Date(this.state.activeEvent.end.dateTime).toLocaleTimeString()}
+              </Text>
+              {(this.state.activeEvent.body.contentType === "html") ?
+                <div dangerouslySetInnerHTML={{ __html: this.state.activeEvent.body.content }}></div> :
+                <div>{this.state.activeEvent.body.content}</div>
+              }
+            </Stack>
+          </Panel>
         }
         {
           !this.state.loading &&
