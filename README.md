@@ -21,6 +21,15 @@ The Me solution provides 3 different webparts to deploy to SharePoint page to pr
 
 ![MeHub](assets/MeHub.png)
 
+## Properties and Graph Permissions
+
+Each SPFX webpart has several properties and Graph permissions required. 
+
+1. [MyEmail readme](./src/email/readme.md)
+2. [MyEvents readme](./src/events/readme.md)
+3. [ToDo readme](./src/todo/readme.md)
+
+
 ## Minimal Path to Awesome
 1. Upload the [my-email.sppkg](./solution/my-email.sppkg) to your tenant's SharePoint App Catalog.
 2. Upload the [my-calendar.sppkg](./solution/my-calendar.sppkg) to your tenant's SharePoint App Catalog.
@@ -28,10 +37,11 @@ The Me solution provides 3 different webparts to deploy to SharePoint page to pr
     1. In each of the **Do you trust solution** dialog
         1. Make sure **Make this site available to all in the organization** is checked
         1. Click the deploy button
-4. Create a SharePoint Page and configure with Me-Hub webparts.
-5. Download the sample [Teams Manifest](./solution/Me-Hub%20Team%20Manifest/manifest.json)
-6. Update manifest file links and domains to appropriate domain and pages. 
-7. Create zip file with Teams manifest, [Color.png](./solution/Me-Hub%20Team%20Manifest/color.png) and [outline.png](./solution/Me-Hub%20Team%20Manifest/outline.png)
+4. Grant permissions to Graph API from SharePoint admin center 
+5. Create a SharePoint Page and configure with Me-Hub webparts.
+6. Download the sample [Teams Manifest](./solution/Me-Hub%20Team%20Manifest/manifest.json)
+7. Update manifest file links and domains to appropriate domain and pages. 
+8. Create zip file with Teams manifest, [Color.png](./solution/Me-Hub%20Team%20Manifest/color.png) and [outline.png](./solution/Me-Hub%20Team%20Manifest/outline.png)
 8. Upload zip file to Teams to install the app
 
 
